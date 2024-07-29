@@ -65,8 +65,7 @@ OZNViper'ı kullanmak için aşağıdaki gereksinimlerin karşılandığından e
    cd OZNViper
 
 # Gerekli kütüphaneleri yükleyin:
-
-### Aşağıdaki komut ile gerekli kütüphaneleri yükleyebilirsiniz:
+**Aşağıdaki komut ile gerekli kütüphaneleri yükleyebilirsiniz:**
 
 pip install -r requirements.txt
 
