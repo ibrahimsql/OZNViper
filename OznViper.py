@@ -267,7 +267,7 @@ def bannerSanatıYazdır():
 
 def ana():
     bannerSanatıYazdır()
-    parser = argparse.ArgumentParser(prog='sertifikaBilgisi.py', 
+  parser = argparse.ArgumentParser(prog='sertifikaBilgisi.py', 
                                      description='Bir sertifika sıralama ve bilgi toplama aracı.',
                                      usage='%(prog)s -e UÇ NOKTALAR')
 
@@ -278,6 +278,32 @@ def ana():
     parser.add_argument("-c", "--certonly", help="Daha fazla sıralama olmadan yalnızca sertifika bilgisini göster", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("-r", "--request", help="GET isteği ile devam et", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("-l", "--log", help="Log dosyasına yaz", required=False)
+    parser.add_argument("-t", "--timeout", type=int, default=2, help="İstek zaman aşımını belirle")
+    parser.add_argument("-p", "--port", type=int, default=443, help="Hedef portu belirt")
+    parser.add_argument("-v", "--verbose", help="Daha ayrıntılı çıktı için etkinleştir", action='store_true')
+    parser.add_argument("-f", "--format", choices=['json', 'csv'], help="Çıktı formatı belirle", default='text')
+    parser.add_argument("-a", "--analyze", help="Ek analiz seçeneklerini etkinleştir", action='store_true')
+
+    # Ekstra parametreler
+    parser.add_argument("-x", "--proxy", help="Proxy sunucusu kullanarak istek yapar", required=False)
+    parser.add_argument("-e", "--exclude", help="Belirtilen alanları sonuçlardan hariç tutar", required=False)
+    parser.add_argument("-n", "--no-verify", help="SSL sertifika doğrulamasını atlar", default=False, action='store_true')
+    parser.add_argument("-m", "--method", choices=['GET', 'POST'], help="Kullanılacak HTTP metodunu belirt", default='GET')
+    parser.add_argument("-h", "--headers", help="Özel HTTP başlıkları belirtmek için JSON formatında girdi", required=False)
+    parser.add_argument("-q", "--quiet", help="Gürültüyü azaltmak için yalnızca kritik hataları göster", action='store_true')
+    parser.add_argument("-z", "--retry", type=int, default=3, help="Başarısız istekler için tekrar deneme sayısı")
+    parser.add_argument("-k", "--keep-alive", help="HTTP Keep-Alive bağlantısını etkinleştir", default=False, action='store_true')
+    parser.add_argument("-j", "--json", help="JSON çıktısını etkinleştir", default=False, action='store_true')
+    parser.add_argument("-u", "--user-agent", help="Özel User-Agent başlığı belirt", required=False)
+    parser.add_argument("-b", "--body", help="POST isteği ile gönderilecek isteği gövdesi", required=False)
+    
+    # Daha fazla özel özellik
+    parser.add_argument("-dL", "--debug-log", help="Hata ayıklama log dosyası belirt", required=False)
+    parser.add_argument("-cL", "--config", help="Yapılandırma dosyası belirt", required=False)
+    parser.add_argument("-fL", "--filter", help="Sonuçları filtrelemek için bir ifade belirt", required=False)
+    parser.add_argument("-aL", "--alert", help="Belirtilen durumlar için uyarı gönder", required=False)
+    parser.add_argument("-tL", "--test", help="Test modu etkinleştir", default=False, action='store_true')
+    parser.add_argument("-nL", "--notification", help="Tamamlandığında bildirim gönder", action='store_true')
 
     args = parser.parse_args()
     girişDosyası = args.input
