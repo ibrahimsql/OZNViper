@@ -26,7 +26,8 @@ OZNViper, hedef alan adları üzerinde kapsamlı analizler yapmanıza ve SSL/TLS
    cd OZNViper
 2. Gerekli kütüphaneleri yükleyin:
    ```bash
-pip install -r requirements.txt
+   pip install -r requirements.txt
+
 ## 📋 Parametreler
 ### Parametre	Açıklama
 -d, --domain	Taramak için alan adları (zorunlu değil)
