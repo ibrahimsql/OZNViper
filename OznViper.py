@@ -261,16 +261,17 @@ def bannerSanatıYazdır():
 ███    ███ ███▄     ▄█ ███   ███ ███    ███ ███    ███   ███          ███    ███   ███    ███ 
  ▀██████▀   ▀████████▀  ▀█   █▀   ▀██████▀   ▀██████▀   ▄████▀        ██████████   ███    ███ 
                                                                                    ███    ███ 
- v1.0{RESET}
+ v2.0{RESET}
     """
     print(sanat)
 
 def ana():
     bannerSanatıYazdır()
-  parser = argparse.ArgumentParser(prog='sertifikaBilgisi.py', 
-                                     description='Bir sertifika sıralama ve bilgi toplama aracı.',
+   parser = argparse.ArgumentParser(prog='OZNvoper', 
+                                     description='Türkiyenin En İyi Sub Domain Tarama Aleti.',
                                      usage='%(prog)s -e UÇ NOKTALAR')
 
+    # Temel parametreler
     parser.add_argument("-d", "--domain", help="Taramak için uç noktalar, virgülle ayrılmış", required=False)
     parser.add_argument("-s", "--socket", help="Sertifika almak için kendi tanımlı soketi kullan", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("-i", "--input", help="Analiz edilecek alanları içeren giriş dosyası", required=False)
@@ -296,7 +297,7 @@ def ana():
     parser.add_argument("-j", "--json", help="JSON çıktısını etkinleştir", default=False, action='store_true')
     parser.add_argument("-u", "--user-agent", help="Özel User-Agent başlığı belirt", required=False)
     parser.add_argument("-b", "--body", help="POST isteği ile gönderilecek isteği gövdesi", required=False)
-    
+
     # Daha fazla özel özellik
     parser.add_argument("-dL", "--debug-log", help="Hata ayıklama log dosyası belirt", required=False)
     parser.add_argument("-cL", "--config", help="Yapılandırma dosyası belirt", required=False)
@@ -304,6 +305,46 @@ def ana():
     parser.add_argument("-aL", "--alert", help="Belirtilen durumlar için uyarı gönder", required=False)
     parser.add_argument("-tL", "--test", help="Test modu etkinleştir", default=False, action='store_true')
     parser.add_argument("-nL", "--notification", help="Tamamlandığında bildirim gönder", action='store_true')
+
+    # Ek parametreler
+    parser.add_argument("-eL", "--email", help="Sonuçları e-posta ile gönder", required=False)
+    parser.add_argument("-sl", "--silent", help="Hiçbir çıktı göstermeden çalışır", action='store_true')
+    parser.add_argument("-bL", "--batch", help="Batched işlemler için dosya belirt", required=False)
+    parser.add_argument("-g", "--gzip", help="Gzip sıkıştırması kullanarak sonuçları gönder", action='store_true')
+    parser.add_argument("-cL", "--custom-headers", help="Özel başlıklar tanımlamak için bir dosya belirt", required=False)
+    parser.add_argument("-iL", "--ignore-errors", help="Hataları göz ardı et", action='store_true')
+    parser.add_argument("-pL", "--progress", help="İlerleme çubuğu göster", action='store_true')
+    parser.add_argument("-tl", "--task-list", help="Yapılacak işlemler için bir liste belirt", required=False)
+    parser.add_argument("-rL", "--response-time", help="Cevap süresini ölç", action='store_true')
+    parser.add_argument("-dA", "--download", help="Belirtilen URL'den dosya indir", required=False)
+
+    # Subdomain tarama için ek parametreler
+    parser.add_argument("-sd", "--subdomain", help="Alt alan adlarını taramak için kullanılacak dosya", required=False)
+    parser.add_argument("-sdv", "--subdomain-verbose", help="Alt alan adı taramasında daha ayrıntılı çıktı için etkinleştir", action='store_true')
+    parser.add_argument("-sde", "--subdomain-exclude", help="Alt alan adları için hariç tutma listesi belirt", required=False)
+    parser.add_argument("-sdt", "--subdomain-timeout", type=int, default=2, help="Alt alan adı taraması için zaman aşımını belirle")
+
+    # Benzersiz özel parametreler
+    parser.add_argument("--honeytoken", help="Bal küpü tokeni ekleyerek sahte istekleri tespit eder", action='store_true')
+    parser.add_argument("--rate-limit", type=int, help="İstek başına hız sınırını belirle", default=10)
+    parser.add_argument("--fingerprint", help="Cihaz parmak izi ile kimlik doğrulama yap", action='store_true')
+    parser.add_argument("--captcha", help="İnsan doğrulaması için CAPTCHA kullan", action='store_true')
+    parser.add_argument("--anomaly-detection", help="Anormal trafik tespiti için makine öğrenimi modelini kullan", action='store_true')
+    parser.add_argument("--session-record", help="İstek oturumlarını kaydeder ve tekrar oynatır", action='store_true')
+    parser.add_argument("--simulate", help="Gerçek tarama yerine simülasyon yapar", action='store_true')
+    parser.add_argument("--dynamic-throttling", help="Dinamik hız sınırlandırma uygular", action='store_true')
+    parser.add_argument("--geo-block", help="Belirli coğrafi konumlara göre istekleri engeller", action='store_true')
+    parser.add_argument("--decoy", help="Yanıltıcı veri ile sahte sonuçlar üretir", action='store_true')
+    parser.add_argument("--proxychains", help="ProxyChains kullanarak istek yapar", action='store_true')
+    parser.add_argument("--rotate-proxies", help="İstekler için proxy listesini döndürerek kullanır", required=False)
+    parser.add_argument("--dns-over-https", help="DNS sorgularını HTTPS üzerinden yapar", action='store_true')
+    parser.add_argument("--stealth", help="Stealth modunu etkinleştirir, iz bırakmaz", action='store_true')
+    parser.add_argument("--sandbox", help="Tüm işlemleri izole edilmiş bir sandbox ortamında çalıştırır", action='store_true')
+    parser.add_argument("--auto-retry", help="Başarısız istekler için otomatik yeniden deneme mekanizması", action='store_true')
+    parser.add_argument("--max-retries", type=int, default=5, help="Maksimum yeniden deneme sayısı")
+    parser.add_argument("--config-file", help="Yapılandırma dosyasını belirt", required=False)
+    parser.add_argument("--interactive-mode", help="Etkileşimli modda çalıştır", action='store_true')
+    parser.add_argument("--visual-mode", help="Görsel arayüz modunda çalıştır", action='store_true')
 
     args = parser.parse_args()
     girişDosyası = args.input
@@ -323,14 +364,14 @@ def ana():
         logGosterici = open(logDosyası, 'a')  # Append mode
 
     if alanDizesi:
-        uç noktalar = alanDizesi.replace(" ", "").split(",")
+        uçNoktalar = alanDizesi.replace(" ", "").split(",")
 
     if girişDosyası:
-        uç noktalar = []
+        uçNoktalar = []
         try:
             with open(girişDosyası, 'r') as inFile:
                 for alanlar in inFile:
-                    uç noktalar.append(alanlar.strip())
+                    uçNoktalar.append(alanlar.strip())
         except FileNotFoundError:
             print(f"{KIRMIZI}[!] Hata: Giriş dosyası mevcut değil{RESET}")
             exit()
@@ -339,7 +380,7 @@ def ana():
         print(f"{KIRMIZI}[!] Hata: -e veya -i ile belirtilen uç noktalar yok{RESET}")
         exit()
 
-    for endpoint in uç noktalar:
+    for endpoint in uçNoktalar:
         if 'http://' in endpoint:
             print(f"{KIRMIZI}[!] http:// şeması dahil, kaldırılıyor...{RESET}") 
             endpoint = endpoint.lstrip('http://')
@@ -378,11 +419,9 @@ def ana():
         # Log dosyasına yaz
         if logGosterici:
             logGosterici.write(f"{datetime.datetime.now()}: {endpoint} için keşfedilen alanlar: {len(sanBenzersiz) + len(crtBenzersiz)}\n")
-
     if çıkışDosyası:
         dosyaGosterici.close()
     if logDosyası:
         logGosterici.close()
-
 if __name__ == '__main__':
     ana()
