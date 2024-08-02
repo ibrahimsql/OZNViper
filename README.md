@@ -149,6 +149,15 @@ python OZNViper.py -d example.com -sl
 Tüm parametreleri kullanarak tarama yapmak:
 python OZNViper.py -d example.com -i input.txt -o output.json -t 10 -n -m GET -v -z 3
 
+#### [Daha fazla bilgi ve katkıda bulunmak için OZNViper GitHub sayfasına göz atabilirsiniz.](https://github.com/ibrahimsql/OZNViper)
+
+
+
+
+
+
+
+
 
 
 
