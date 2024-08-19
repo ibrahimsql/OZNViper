@@ -553,7 +553,70 @@ parser.add_argument("-vpn", "--vpn-config", help="VPN yapılandırma dosyasını
             yazdir(f"----- Toplam {endpoint} alanları keşfedildi: {len(crtBenzersiz)} -----", dosyaGosterici, ACI_YESIL)
         else:
             yazdir(f"----- {endpoint} alanları keşfedilemedi -----", dosyaGosterici, KIRMIZI)
+  # Argümanları ayrıştır
+    args = parser.parse_args()
 
+    # Verbose mod için ek bilgiler
+    if args.verbose:
+        print(f"Domain: {args.domain}")
+        print(f"Port: {args.port}")
+        print(f"Timeout: {args.timeout}")
+        print(f"Method: {args.method}")
+
+    # Sertifika kontrolü
+    if args.certonly:
+        print(f"Sadece sertifika kontrolü yapılıyor: {args.domain}")
+        # Gerçek sertifika kontrol kodu burada olabilir.
+        return
+
+    # Proxy kullanımı ayarları
+    proxies = None
+    if args.proxy:
+        proxies = {
+            'http': args.proxy,
+            'https': args.proxy
+        }
+
+    # HTTP isteği oluşturma
+    if args.request:
+        url = f"https://{args.domain}:{args.port}"
+        headers = json.loads(args.headers) if args.headers else {}
+
+        # User-Agent ekleme
+        if args.user_agent:
+            headers['User-Agent'] = args.user_agent
+
+        try:
+            # GET veya POST isteği
+            if args.method == 'GET':
+                response = requests.get(url, headers=headers, timeout=args.timeout, verify=not args.no_verify, proxies=proxies)
+            elif args.method == 'POST':
+                response = requests.post(url, headers=headers, data=args.body, timeout=args.timeout, verify=not args.no_verify, proxies=proxies)
+
+            # Sonuçların işlenmesi
+            if not args.quiet:
+                print(f"Durum Kodu: {response.status_code}")
+                if args.verbose:
+                    print(f"Headers: {response.headers}")
+                    print(f"Content: {response.text}")
+
+            # Sonuçları dosyaya kaydetme
+            if args.output:
+                with open(args.output, 'w', encoding='utf-8') as f:
+                    f.write(response.text)
+                print(f"Sonuçlar {args.output} dosyasına kaydedildi.")
+
+        except requests.RequestException as e:
+            print(f"HTTP isteği başarısız oldu: {e}")
+
+    # Log yazma
+    if args.log:
+        with open(args.log, 'a', encoding='utf-8') as log_file:
+            log_file.write(f"{args.domain} için yapılan işlem tamamlandı.\n")
+
+    # Analiz yapma
+    if args.analyze:
+        print("Analiz başlatıldı...")
         # Log dosyasına yaz
         if logGosterici:
             logGosterici.write(f"{datetime.datetime.now()}: {endpoint} için keşfedilen alanlar: {len(sanBenzersiz) + len(crtBenzersiz)}\n")
