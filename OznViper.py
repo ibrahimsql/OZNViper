@@ -345,6 +345,144 @@ def ana():
     parser.add_argument("--config-file", help="Yapılandırma dosyasını belirt", required=False)
     parser.add_argument("--interactive-mode", help="Etkileşimli modda çalıştır", action='store_true')
     parser.add_argument("--visual-mode", help="Görsel arayüz modunda çalıştır", action='store_true')
+    parser.add_argument("-dL", "--debug-log", help="Hata ayıklama log dosyası belirt", required=False)
+    parser.add_argument("-cL", "--config", help="Yapılandırma dosyası belirt", required=False)
+   parser.add_argument("-fL", "--filter", help="Sonuçları filtrelemek için bir ifade belirt", required=False)
+   parser.add_argument("-aL", "--alert", help="Belirtilen durumlar için uyarı gönder", required=False)
+   parser.add_argument("-tL", "--test", help="Test modu etkinleştir", action='store_true')
+  parser.add_argument("-nL", "--notification", help="Tamamlandığında bildirim gönder", action='store_true')
+
+# Ek Parametreler
+parser.add_argument("-eL", "--email", help="Sonuçları e-posta ile gönder", required=False)
+parser.add_argument("-sl", "--silent", help="Hiçbir çıktı göstermeden çalışır", action='store_true')
+parser.add_argument("-bL", "--batch", help="Batched işlemler için dosya belirt", required=False)
+parser.add_argument("-g", "--gzip", help="Gzip sıkıştırması kullanarak sonuçları gönder", action='store_true')
+parser.add_argument("-cL", "--custom-headers", help="Özel başlıklar tanımlamak için bir dosya belirt", required=False)
+parser.add_argument("-iL", "--ignore-errors", help="Hataları göz ardı et", action='store_true')
+parser.add_argument("-pL", "--progress", help="İlerleme çubuğu göster", action='store_true')
+parser.add_argument("-tl", "--task-list", help="Yapılacak işlemler için bir liste belirt", required=False)
+parser.add_argument("-rL", "--response-time", help="Cevap süresini ölç", action='store_true')
+parser.add_argument("-dA", "--download", help="Belirtilen URL'den dosya indir", required=False)
+
+# Subdomain Tarama için Ek Parametreler
+parser.add_argument("-sd", "--subdomain", help="Alt alan adlarını taramak için kullanılacak dosya", required=False)
+parser.add_argument("-sdv", "--subdomain-verbose", help="Alt alan adı taramasında daha ayrıntılı çıktı için etkinleştir", action='store_true')
+parser.add_argument("-sde", "--subdomain-exclude", help="Alt alan adları için hariç tutma listesi belirt", required=False)
+parser.add_argument("-sdt", "--subdomain-timeout", type=int, default=2, help="Alt alan adı taraması için zaman aşımını belirle")
+parser.add_argument("-wL", "--wordlist", help="Subdomain taraması için kelime listesi belirt", required=True)
+parser.add_argument("-mS", "--mode", choices=['bruteforce', 'dictionary'], default='dictionary', help="Subdomain tarama modu")
+parser.add_argument("-mxR", "--max-recursion", type=int, default=2, help="Maksimum yineleme derinliği")
+parser.add_argument("-rsv", "--resolve", help="Alt alan adlarını IP'lere çözümle", action='store_true')
+parser.add_argument("-cf", "--cname-follow", help="CNAME kayıtlarını takip et", action='store_true')
+parser.add_argument("-tt", "--target-time", type=int, default=300, help="Tarama için toplam hedef süre")
+parser.add_argument("-dp", "--dns-providers", help="DNS çözümlemesi için kullanılacak DNS sağlayıcıları", required=False)
+
+# Çıktı ve Raporlama
+parser.add_argument("-rf", "--report-format", choices=['txt', 'json', 'csv', 'html'], default='txt', help="Tarama sonuçlarının formatı")
+parser.add_argument("-rp", "--report-path", help="Tarama sonuçlarını kaydetmek için dosya yolu", required=False)
+parser.add_argument("-oc", "--output-clean", help="Temiz bir çıktı için yalnızca aktif subdomain'leri listele", action='store_true')
+parser.add_argument("-rs", "--result-summary", help="Tarama sonunda özet rapor oluştur", action='store_true')
+
+# Ağ ve Zamanlama
+parser.add_argument("-rt", "--retry-timeout", type=int, default=5, help="Başarısız istekler için yeniden deneme zaman aşımı")
+parser.add_argument("-mR", "--max-retries", type=int, default=3, help="Başarısız DNS istekleri için maksimum deneme sayısı")
+parser.add_argument("-tn", "--thread-number", type=int, default=10, help="Tarama için kullanılacak iş parçacığı sayısı")
+parser.add_argument("-rl", "--rate-limit", type=int, default=100, help="Saniye başına maksimum istek sayısı")
+parser.add_argument("-tr", "--time-range", help="Taramayı belirli bir zaman aralığında gerçekleştir", required=False)
+
+# Gelişmiş Tarama Özellikleri
+parser.add_argument("-dS", "--dnssec", help="DNSSEC destekli subdomain'leri belirler", action='store_true')
+parser.add_argument("-wR", "--wildcard", help="Wildcard DNS kayıtlarını tespit eder", action='store_true')
+parser.add_argument("-mxS", "--mx-records", help="MX kayıtlarını tespit ederek subdomain'leri bulur", action='store_true')
+parser.add_argument("-srv", "--srv-records", help="SRV kayıtlarını kullanarak subdomain'leri bulur", action='store_true')
+parser.add_argument("-txt", "--txt-records", help="TXT kayıtlarını kullanarak subdomain'leri bulur", action='store_true')
+parser.add_argument("-sp", "--suppress-duplicates", help="Tekrarlanan subdomain sonuçlarını bastır", action='store_true')
+
+# Otomatik İşlem ve İzleme
+parser.add_argument("-wl", "--watch-list", help="Belirtilen subdomain'ler üzerinde değişiklikleri izler", required=False)
+parser.add_argument("-si", "--schedule-interval", type=int, help="Belirli aralıklarla otomatik tarama yap", required=False)
+parser.add_argument("-at", "--auto-trigger", help="Özel durumlarda otomatik tarama tetikle", required=False)
+
+# Hata ve Sorun Giderme
+parser.add_argument("-dt", "--debug", help="Hata ayıklama modunu etkinleştir", action='store_true')
+parser.add_argument("-hl", "--hard-limit", type=int, default=10000, help="İşlem başına maksimum alt alan adı sınırı")
+parser.add_argument("-ab", "--abort", help="Belirli bir hata durumunda işlemi iptal et", required=False)
+parser.add_argument("-rt", "--retry-errors", help="Hatalı istekleri yeniden dene", action='store_true')
+
+# Ek Parametreler
+parser.add_argument("-ip", "--ip-address", help="Taranacak IP adreslerini belirt", required=False)
+parser.add_argument("-dns", "--dns-server", help="Kullanılacak DNS sunucusunu belirt", required=False)
+parser.add_argument("-ttl", "--time-to-live", type=int, help="DNS sorguları için TTL değeri belirt", default=60)
+parser.add_argument("-res", "--resolver", help="Kullanılacak DNS çözümleyicisi belirt", required=False)
+parser.add_argument("-ts", "--timestamp", help="Sonuçlara zaman damgası ekle", action='store_true')
+parser.add_argument("-tpf", "--target-protocol", choices=['http', 'https'], help="Taramada kullanılacak protokolü belirt", default='https')
+parser.add_argument("-rsf", "--resolve-first", help="Tarama öncesi IP çözümlemesini gerçekleştir", action='store_true')
+
+# Güvenlik ve Kimlik Doğrulama
+parser.add_argument("-auth", "--authentication", help="Kimlik doğrulama bilgilerini belirt", required=False)
+parser.add_argument("-sec", "--security", choices=['low', 'medium', 'high'], help="Güvenlik seviyesini belirt", default='medium')
+parser.add_argument("-enc", "--encryption", help="Şifreleme yöntemini belirt", required=False)
+parser.add_argument("-cf", "--captcha-file", help="CAPTCHA doğrulaması için dosya belirt", required=False)
+parser.add_argument("-otp", "--one-time-password", help="Tek kullanımlık şifre ile doğrulama yap", action='store_true')
+parser.add_argument("-api", "--api-key", help="API anahtarı ile doğrulama yap", required=False)
+parser.add_argument("-cert", "--certificate", help="SSL sertifikasını belirt", required=False)
+parser.add_argument("-ca", "--certificate-authority", help="Kullanılacak sertifika otoritesini belirt", required=False)
+
+# Ağ ve Zamanlama
+parser.add_argument("-rc", "--retry-count", type=int, help="Maksimum yeniden deneme sayısını belirt", default=3)
+parser.add_argument("-cw", "--connection-wait", type=int, help="Bağlantı bekleme süresini belirt", default=2)
+parser.add_argument("-nw", "--network-wait", type=int, help="Ağ yanıt bekleme süresini belirt", default=5)
+parser.add_argument("-rt", "--response-timeout", type=int, help="Yanıt zaman aşımını belirt", default=60)
+parser.add_argument("-rwt", "--retry-wait-time", type=int, help="Yeniden denemeler arası bekleme süresini belirt", default=5)
+parser.add_argument("-cp", "--connection-pool", help="Bağlantı havuzu kullan", action='store_true')
+
+# Gelişmiş Tarama Özellikleri
+parser.add_argument("-ai", "--ai-analysis", help="Yapay zeka ile tarama sonuçlarını analiz et", action='store_true')
+parser.add_argument("-ml", "--machine-learning", help="Makine öğrenimi modelini belirt", required=False)
+parser.add_argument("-di", "--deep-inspection", help="Derinlemesine tarama yap", action='store_true')
+parser.add_argument("-an", "--anomaly", help="Anomalileri tespit et", action='store_true')
+parser.add_argument("-sig", "--signature", help="İmzalı verilerle doğrulama yap", required=False)
+parser.add_argument("-for", "--forensics", help="Adli analiz için veri topla", action='store_true')
+parser.add_argument("-sm", "--scan-mode", choices=['fast', 'comprehensive'], help="Tarama modunu belirt", default='fast')
+
+# Otomatik İşlem ve İzleme
+parser.add_argument("-mc", "--monitor-changes", help="Alt alan adı değişikliklerini izle", action='store_true')
+parser.add_argument("-lfs", "--log-file-size", type=int, help="Maksimum log dosyası boyutunu belirt", default=10)
+parser.add_argument("-cr", "--change-report", help="Değişiklik raporu oluştur", action='store_true')
+parser.add_argument("-uip", "--update-ip", help="IP adreslerini güncelle", action='store_true')
+parser.add_argument("-lfp", "--log-file-path", help="Log dosyasının kaydedileceği yolu belirt", required=False)
+parser.add_argument("-sn", "--snapshot", help="Tarama öncesi ve sonrası durumun anlık görüntüsünü al", action='store_true')
+
+# Hata ve Sorun Giderme
+parser.add_argument("-err", "--error-log", help="Hata log dosyasını belirt", required=False)
+parser.add_argument("-erm", "--error-mode", choices=['ignore', 'strict'], help="Hata modunu belirt", default='ignore')
+parser.add_argument("-lb", "--log-backup", help="Log dosyasının yedeğini al", action='store_true')
+parser.add_argument("-mem", "--memory-usage", help="Bellek kullanımını izleme modunu etkinleştir", action='store_true')
+parser.add_argument("-cpb", "--create-backup", help="İşlem öncesi yedek oluştur", action='store_true')
+
+# Çıktı ve Raporlama
+parser.add_argument("-xt", "--xml-output", help="Sonuçları XML formatında çıkart", action='store_true')
+parser.add_argument("-md", "--markdown", help="Sonuçları Markdown formatında çıkart", action='store_true')
+parser.add_argument("-df", "--detailed-format", help="Daha detaylı bir çıktı formatı kullan", action='store_true')
+parser.add_argument("-pi", "--print-interval", type=int, help="Çıktı raporlama aralığını belirt", default=30)
+parser.add_argument("-lp", "--log-path", help="Log dosyasının kaydedileceği dizini belirt", required=False)
+parser.add_argument("-lg", "--log-level", choices=['INFO', 'DEBUG', 'ERROR'], help="Log seviyesi belirt", default='INFO')
+parser.add_argument("-eml", "--email-report", help="Raporu e-posta ile gönder", action='store_true')
+parser.add_argument("-srt", "--sort-results", help="Sonuçları belirli bir kritere göre sırala", required=False)
+parser.add_argument("-mr", "--merge-reports", help="Birden fazla raporu birleştir", action='store_true')
+
+# Performans ve Kaynak Yönetimi
+parser.add_argument("-prf", "--performance", help="Performans izleme modunu etkinleştir", action='store_true')
+parser.add_argument("-rsc", "--resource-control", help="Kaynak kullanımını kontrol et", action='store_true')
+parser.add_argument("-thr", "--thread-limit", type=int, help="İş parçacığı sınırını belirt", default=50)
+parser.add_argument("-buf", "--buffer-size", type=int, help="Veri tampon boyutunu belirt", default=8192)
+parser.add_argument("-rm", "--resource-monitor", help="Kaynak izleme modunu etkinleştir", action='store_true')
+
+# Güvenlik ve Kimlik Doğrulama (Ek)
+parser.add_argument("-twf", "--two-factor", help="İki aşamalı doğrulama kullan", action='store_true')
+parser.add_argument("-mtk", "--mtls-key", help="Karşılıklı TLS için anahtar dosyasını belirt", required=False)
+parser.add_argument("-mtc", "--mtls-cert", help="Karşılıklı TLS için sertifika dosyasını belirt", required=False)
+parser.add_argument("-vpn", "--vpn-config", help="VPN yapılandırma dosyasını belirt", required=False)
 
     args = parser.parse_args()
     girişDosyası = args.input
