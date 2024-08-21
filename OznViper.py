@@ -137,7 +137,7 @@ def sertifikaBilgisiAl(x509Sertifika, dosyaGosterici):
     return sertifikaBilgisi
 
 def sanÇıkar(endpoint, sanListesi, istekBayrağı, dosyaGosterici):
-    benzersizUç noktalar = []
+ benzersiz_uc_noktalar = []
 
     for alan in sanListesi:
         geçerliAlan, temizAlan = alanıTemizle(endpoint, alan)
